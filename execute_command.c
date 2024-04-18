@@ -10,7 +10,7 @@
 
 char *direct_command(char *command)
 {
-	Tlist *head = path_in_list();
+	/* Tlist *head = path_in_list(); */
 
 	if (!head)
 		return (NULL);
@@ -23,13 +23,13 @@ char *direct_command(char *command)
 		sprintf(aux, "%s/%s", current->direct, command);
 		if (access(aux, X_OK) == 0)
 		{
-			free_list(head);
+			/* free_list(head); */
 			return strdup(aux);
 		}
 		current = current->next;
 	}
 
-	free_list(head);
+	/* free_list(head); */
 	return (NULL);
 }
 
@@ -46,13 +46,14 @@ char *direct_command(char *command)
 int execute_command(char **args)
 {
 	pid_t pid;
-	int flag = 0, status;
+	int status;
 	char *command = args[0];
 	
 	if (command[0] != '/' && command[0] != '.')
 	{
-		flag = 1;
+		/* flag = 1; */
 		command = direct_command(command);
+		args[0] = command;
 	}
 
 	if (command || (access(command, X_OK) == 1))
@@ -60,8 +61,8 @@ int execute_command(char **args)
 		pid = fork();
 		if (pid == -1)
 		{
-			if (flag)
-				free(command);
+			/* if (flag)
+				free(command); */
 			perror("error en el fork :(");
 			return (12400);
 		}
@@ -73,8 +74,8 @@ int execute_command(char **args)
 	else
 		perror("el comando no esta en el path burro, consulte help para ver comandos");
 
-	if (flag)
-		free(command);
+	/* if (flag)
+		free(command) */
 
 	return (0);
 }
