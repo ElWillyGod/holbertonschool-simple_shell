@@ -109,7 +109,7 @@ int main(int ac, char **av)
 	size_t line_size;
 	char **tokens;
 
-	static PATH = path_in_list();
+	static head = path_in_list();
 
 	/* WIP, Task 22 */
 	if (ac == 2)
@@ -130,7 +130,7 @@ int main(int ac, char **av)
 		tokens = tokenize(&line, &tokens);
 
 		/* Call to shelloc in shelloc.c - */
-		result = shelloc(args);
+		result = exectute_command(args);
 
 		free_tokens(tokens);
 
