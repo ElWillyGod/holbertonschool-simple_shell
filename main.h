@@ -3,6 +3,11 @@
 
 #include <stdlib.h>
 #include <sys/types.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
 
 
 extern char **environ;
@@ -19,7 +24,7 @@ size_t memory_used(void *ptr);
 void *_realloc(void *ptr, size_t size);
 
 void free_list(Tlist *list);
-void *path_in_list();
+Tlist *path_in_list();
 
 char *_getenv(const char *var);
 
