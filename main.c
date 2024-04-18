@@ -109,7 +109,7 @@ int main(int ac, char **av)
 	size_t line_size;
 	char **tokens;
 
-	static head = path_in_list();
+	head = path_in_list();
 
 	/* WIP, Task 22 */
 	if (ac == 2)
@@ -138,7 +138,7 @@ int main(int ac, char **av)
 		if (result == -2)
 			break;
 		else if (result != 0)
-			handle_error(result);
+			error_handler(result);
 	}
 
 	free(line);
