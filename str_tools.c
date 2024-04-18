@@ -1,4 +1,4 @@
-
+#include "main.h"
 /**
  * _strlen - Gets length of a string.
  *
@@ -47,8 +47,7 @@ char *_strcpy(char *dest, char *src)
  * Return: (str)
  */
 char *_utoa(char *str, unsigned int uinteger, unsigned int ulen)
-{
-	while (ulen > 0)
+{	while (ulen > 0)
 	{
 		str[--ulen] = uinteger % 10 + 48;
 		uinteger /= 10;
@@ -64,7 +63,8 @@ char *_utoa(char *str, unsigned int uinteger, unsigned int ulen)
  *
  * Return: Malloc'd space copy of (str).
  */
-char *_strdup(const char *str)
+
+char *_strdup(char *str)
 {
 	char *cpy;
 	int len;
@@ -83,48 +83,32 @@ char *_strdup(const char *str)
 }
 
 /**
- * _atoi - Converts string to int.
+ * _strcmp - compara dos string
+ * @s1: char 1
+ * @s2: char 2
  *
- * @s: String.
- *
- * Return: Integer.
+ * Return: menot a 0 si s1 es menor, 0 si son iguales, mayor
  */
-int _atoi(char *s)
-{
-	int num;
-	int num_bool;
-	int nega;
-	int nega_bool;
 
-	num = 0;
-	num_bool = 0;
-	nega = 0;
-	nega_bool = 1;
-	for (; *s; s++)
+int _strcmp(char *s1, char *s2)
+{
+	/* avanzamos mientras sean inguales y no lleguen al final */
+	/*si son iguales retornamos 0; si no, hacemos la resta de chars*/
+
+	while ((*s1 != '\0' && *s2 != '\0') && (*s1 == *s2))
 	{
-		if (*s == '-' && nega_bool)
-			if (nega == 1)
-				nega = 0;
-			else
-				nega = 1;
-		else if (*s >= 48 && *s <= 57)
-		{
-			if (num_bool || num == 0)
-			{
-				num_bool = 1;
-				if (num > 0)
-					num = (num * 10) + (*s - 48);
-				else if (num < 0)
-					num = (num * 10) - (*s - 48);
-				else
-					num = *s - 48;
-			}
-			if (nega == 1 && nega_bool)
-				num = num * -1;
-			nega_bool = 0;
-		}
-		else if (num_bool)
-			num_bool = 0;
+		s1++;
+		s2++;
 	}
-	return (num);
+
+	if (*s1 == *s2)
+	{
+		return (0);
+	}
+	else
+	{
+		return (*s1 - *s2);
+	}
 }
+
+

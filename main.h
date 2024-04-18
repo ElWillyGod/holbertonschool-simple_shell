@@ -9,16 +9,21 @@
 #include <time.h>
 #include <unistd.h>
 
+typedef  struct rep_list Tlist;
 
 extern char **environ;
-
-typedef  struct rep_list Tlist;
+extern Tlist *head;
 
 struct rep_list
 {
 	char *direct;
 	Tlist *next;
 };
+
+unsigned int _strlen(char *str);
+char *_strcpy(char *dest, char *src);
+char *_utoa(char *str, unsigned int uinteger, unsigned int ulen);
+char *_strdup(char *str);
 
 size_t memory_used(void *ptr);
 void *_realloc(void *ptr, size_t size);
