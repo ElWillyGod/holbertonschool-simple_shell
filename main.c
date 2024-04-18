@@ -94,6 +94,8 @@ void shelloc_file(const char *filename)
 {
 }
 
+Tlist head;
+
 /**
  * main - Main.
  *
