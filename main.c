@@ -8,7 +8,7 @@
 /**
  * free_tokens - Frees the malloc'd tokens in the tokens list.
  *
- * @tokens: Token list.
+ * @tokens: Malloc'd token list.
  */
 static void free_tokens(char **tokens)
 {
@@ -62,26 +62,36 @@ static char **add_token_to_tokens(const char *token, size_t *tokens_size,
 /**
  * tokenize - Gets token from given string.
  *
- * @line: line to tokenize.
+ * @line: Line to tokenize.
+ * @tokens: Malloc'd list to save tokens.
  *
- * Return: list of malloc'd tokens.
+ * Return: List of malloc'd tokens.
  */
-static char **tokenize(char **line, char **tokens)
+static char **tokenize(char **line, char ***tokens)
 {
 	size_t tokens_size;
 	char *token;
 
 	tokens_size = 0;
-	token = strok(*line, " \n\t");
+	token = strtok(*line, " \n\t");
 	while (token)
 	{
-		add_token_to_tokens(token, &tokens_size, &tokens);
-		token = strok(NULL, " \n\t");
+		add_token_to_tokens(token, &tokens_size, tokens);
+		token = strtok(NULL, " \n\t");
 	}
 
 	add_token_to_tokens(NULL, &tokens_size, &tokens);
 
 	return (tokens);
+}
+
+/**
+ * shelloc_file - Runs shell on the file given.
+ *
+ * @filename: Path to file.
+ */
+void shelloc_file(const char *filename)
+{
 }
 
 /**
@@ -99,28 +109,29 @@ int main(int ac, char **av)
 	size_t line_size;
 	char **tokens;
 
+	static PATH = path_in_list();
+
 	/* WIP, Task 22 */
-	if (ac > 1)
+	if (ac == 2)
 	{
-		return (0);
+		shelloc_file(av[1]);
 	}
+
+	signal(SIGINT, SIG_IGN);
 
 	line = malloc(120 * sizeof(char));
 	tokens = malloc(sizeof(char *));
 	while (1)
 	{
-		printf("%s<<Shelloc Homes>> $ %s", RED, RESET);
+		printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
 
-		/* WIP, Reads line using getline */
-		line = get_line(&line, &size, stdin);
+		line = _getline(&line, &size, stdin);
 
-		/* WIP, Tokenizes line into tokens */
-		tokens = tokenize(line, tokens);
+		tokens = tokenize(&line, &tokens);
 
-		/* WIP */
+		/* Call to shelloc in shelloc.c - */
 		result = shelloc(args);
 
-		/* Frees malloc'd strings from (tokens) */
 		free_tokens(tokens);
 
 		/* exit command and error handling */
