@@ -1,57 +1,55 @@
 #include "main.h"
 
 /**
+* free_list - Frees a list.
 *
-*
-*
-*
-*
-*
+* @list: List to free.
 */
-
 void free_list(Tlist *list)
 {
+	Tlist *aux;
+
 	while (list)
 	{
-		Tlist *aux = list->next;
+		aux = list->next;
 		free(list->direct);
 		free(list);
 		list = aux;
 	}
 }
-
-Tlist *path_in_list()
+/**
+ * tokenize_path - Tokenizes and adds to list the PATH env var.
+ *
+ * @path_copy: Copy of the var PATH.
+ *
+ * Return: (head).
+ */
+Tlist *tokenize_path(char *path_copy)
 {
-	char *path = _getenv("PATH");
-	if (!path)
-	{
-		fprintf(stderr, "Problemas con el PATH");
-		exit(19);
-	}
+	char *token;
+	Tlist *newNode = NULL;
 	Tlist *head = NULL;
 	Tlist *prev = NULL;
-	char *token;
-	char *path_copy = strdup(path);
-	if (!path_copy)
-		fprintf(stderr, "ERROR con la copia");
-	
+
 	token = strtok(path_copy, ":");
 	while (token)
 	{
-		Tlist *newNode = malloc(sizeof(Tlist));
+		newNode = malloc(sizeof(Tlist));
 		if (!newNode)
 		{
-			fprintf(stderr, "ya me aburri de los errores, malloc newNode");
-			//free(newNode);
-			free(path_copy);free_list(head);
+			fprintf(stderr, "Malloc fail.");
+			free(path_copy);
+			free_list(head);
 			exit(20);
 		}
 
 		newNode->direct = strdup(token);
 		if (!newNode->direct)
 		{
-			fprintf(stderr, "por las dudas nomas yo que se, error al copiar el token");
-			free(newNode);free(path_copy);free_list(head);
+			fprintf(stderr, "Malloc fail.");
+			free(newNode);
+			free(path_copy);
+			free_list(head);
 			exit(21);
 		}
 
@@ -64,7 +62,39 @@ Tlist *path_in_list()
 		prev = newNode;
 		token = strtok(NULL, ":");
 	}
+	return (head);
+}
 
-	free(path_copy);free(path);
+
+/**
+ * path_in_list - Creates singly linked list of path.
+ *
+ * Return: Singly linked list of path.
+ */
+Tlist *path_in_list(void)
+{
+	char *path;
+	char *path_copy;
+	Tlist *head;
+
+	path = _getenv("PATH");
+	if (!path)
+	{
+		fprintf(stderr, "PATH not found.");
+		exit(19);
+	}
+
+	path_copy = _strdup(path);
+	if (!path_copy)
+	{
+		fprintf(stderr, "Malloc error.");
+		exit(20);
+	}
+
+	free(path);
+
+	head = tokenize_path(path_copy);
+
+	free(path_copy);
 	return (head);
 }

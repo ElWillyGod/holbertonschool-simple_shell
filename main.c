@@ -25,7 +25,7 @@ static void free_tokens(char **tokens)
  *
  * Return: Reallocated pointer of tokens.
  */
-static char **add_token_to_tokens(const char *token, size_t *tokens_size,
+static char **add_token_to_tokens(char *token, size_t *tokens_size,
 		char ***tokens)
 {
 	char *mallocd_token;
@@ -35,7 +35,8 @@ static char **add_token_to_tokens(const char *token, size_t *tokens_size,
 	mallocator = realloc(*tokens, sizeof(char **) * (*tokens_size));
 	if (!*mallocator)
 	{
-		/* handle malloc fail */
+		perror("Malloc fail");
+		exit(1);
 	}
 	*tokens = mallocator;
 
@@ -44,7 +45,8 @@ static char **add_token_to_tokens(const char *token, size_t *tokens_size,
 		mallocd_token = _strdup(token);
 		if (!mallocd_token)
 		{
-			/* handle malloc fail */
+			perror("Malloc fail");
+			exit(2);
 		}
 
 		*tokens[*tokens_size - 1] = mallocd_token;
@@ -80,7 +82,7 @@ static char **tokenize(char **line, char ***tokens)
 
 	add_token_to_tokens(NULL, &tokens_size, tokens);
 
-	return (tokens);
+	return (*tokens);
 }
 
 /**
@@ -88,11 +90,14 @@ static char **tokenize(char **line, char ***tokens)
  *
  * @filename: Path to file.
  */
-void shelloc_file(const char *filename)
+void shelloc_file(char *filename)
 {
+	int fd;
+
+	fd = open(filename, O_RDONLY);
+	close(fd);
 }
 
-Tlist head;
 
 /**
  * main - Main.
@@ -104,45 +109,42 @@ Tlist head;
  */
 int main(int ac, char **av)
 {
-	int i;
 	char *line;
 	size_t line_size;
 	char **tokens;
-	int result;
-	int size;
+	ssize_t result1;
+	int result2;
+	Tlist *path_head;
 
-	head = path_in_list();
+	path_head = path_in_list();
 
-	/* WIP, Task 22 */
 	if (ac == 2)
 	{
 		shelloc_file(av[1]);
 	}
 
 	signal(SIGINT, SIG_IGN);
-
 	line = malloc(120 * sizeof(char));
 	tokens = malloc(sizeof(char *));
 	while (1)
 	{
 		printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
 
-		line = _getline(&line, &size, stdin);
+		result1 = getline(&line, &line_size, stdin);
+		if (result1 == -1)
+			continue;
 
 		tokens = tokenize(&line, &tokens);
-
-		/* Call to shelloc in shelloc.c - */
-		result = exectute_command(tokens);
-
+		if (_strcmp(tokens[0], "exit") == 0)
+			break;
+		result2 = execute_command(tokens, path_head);
 		free_tokens(tokens);
 
-		/* exit command and error handling */
-		if (result == -2)
+		if (result2 == -2)
 			break;
-		else if (result != 0)
-			error_handler(result);
+		else if (result2 != 0)
+			error_handler(result2);
 	}
-
 	free(line);
 	free(tokens);
 	return (0);

@@ -6,5 +6,5 @@
  */
 void error_handler(int errno)
 {
-
+	errno += 1;
 }

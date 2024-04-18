@@ -1,58 +1,61 @@
 #include "main.h"
+
+
 /**
+* direct_command - Finds if in path and then executes.
 *
+* @command: Command to test.
+* @path_head: Head to list of path.
 *
-*
-*
-*
-*
+* Return: something.
 */
-
-char *direct_command(char *command)
+char *direct_command(char *command, Tlist *path_head)
 {
-	/* Tlist *head = path_in_list(); */
+	Tlist *current;
+	char aux[1024];
 
-	if (!head)
+	current = path_head;
+	if (!current)
 		return (NULL);
-
-	Tlist *current = head;
 
 	while (current)
 	{
-		char aux[1024];
 		sprintf(aux, "%s/%s", current->direct, command);
 		if (access(aux, X_OK) == 0)
 		{
-			/* free_list(head); */
-			return strdup(aux);
+			return (strdup(aux));
 		}
 		current = current->next;
 	}
 
-	/* free_list(head); */
 	return (NULL);
 }
 
 /**
+* execute_command - Executes a command.
 *
+* @args: List of arguments.
+* @path_head: Head of list path.
 *
-*
-*
-*
-*
-*
+* Return: something
 */
 
-int execute_command(char **args)
+int execute_command(char **args, Tlist *path_head)
 {
 	pid_t pid;
 	int status;
 	char *command = args[0];
-	
+
+	command = _strdup(args[0]);
+	if (!command)
+	{
+		perror("Malloc error");
+		return (423);
+	}
+
 	if (command[0] != '/' && command[0] != '.')
 	{
-		/* flag = 1; */
-		command = direct_command(command);
+		command = direct_command(command, path_head);
 		args[0] = command;
 	}
 
@@ -61,21 +64,20 @@ int execute_command(char **args)
 		pid = fork();
 		if (pid == -1)
 		{
-			/* if (flag)
-				free(command); */
-			perror("error en el fork :(");
+			perror("Fork error.");
+			free(command);
 			return (12400);
 		}
 		if (pid == 0)
-			execve(command, args, environ); /* ? que pasara */
+			execve(command, args, environ);
 		else
 			wait(&status);
 	}
 	else
-		perror("el comando no esta en el path burro, consulte help para ver comandos");
+	{
+		perror("Command not found. Burro.");
+	}
 
-	/* if (flag)
-		free(command) */
-
+	free(command);
 	return (0);
 }

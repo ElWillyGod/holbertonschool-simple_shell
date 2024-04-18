@@ -8,22 +8,27 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-
-typedef  struct rep_list Tlist;
+#include <fcntl.h>
 
 extern char **environ;
-extern Tlist *head;
 
-struct rep_list
+/**
+ * struct rep_list - Singly linked list's node of path.
+ *
+ * @direct: Content.
+ * @next: Pointer to next node.
+ */
+typedef struct rep_list
 {
 	char *direct;
-	Tlist *next;
-};
+	struct rep_list *next;
+} Tlist;
 
 unsigned int _strlen(char *str);
 char *_strcpy(char *dest, char *src);
 char *_utoa(char *str, unsigned int uinteger, unsigned int ulen);
 char *_strdup(char *str);
+int _strcmp(char *s1, char *s2);
 
 size_t memory_used(void *ptr);
 void *_realloc(void *ptr, size_t size);
@@ -33,7 +38,12 @@ Tlist *path_in_list();
 
 char *_getenv(const char *var);
 
-char *direct_command(char *command);
-int execute_command(char **args);
+char *direct_command(char *command, Tlist *path_list);
+int execute_command(char **args, Tlist *path_list);
+
+void error_handler(int errno);
+
+extern Tlist *head;
 
 #endif /* MAIN_H */
+

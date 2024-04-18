@@ -47,7 +47,8 @@ char *_strcpy(char *dest, char *src)
  * Return: (str)
  */
 char *_utoa(char *str, unsigned int uinteger, unsigned int ulen)
-{	while (ulen > 0)
+{
+	while (ulen > 0)
 	{
 		str[--ulen] = uinteger % 10 + 48;
 		uinteger /= 10;
@@ -67,7 +68,6 @@ char *_utoa(char *str, unsigned int uinteger, unsigned int ulen)
 char *_strdup(char *str)
 {
 	char *cpy;
-	int len;
 
 	if (!str)
 		return (NULL);
