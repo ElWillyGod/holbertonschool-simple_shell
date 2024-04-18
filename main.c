@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include "main.h"
 
 #define RED "\033[31m"
 #define RESET "\033[0m"
@@ -80,7 +78,7 @@ static char **tokenize(char **line, char ***tokens)
 		token = strtok(NULL, " \n\t");
 	}
 
-	add_token_to_tokens(NULL, &tokens_size, &tokens);
+	add_token_to_tokens(NULL, &tokens_size, tokens);
 
 	return (tokens);
 }
@@ -110,6 +108,8 @@ int main(int ac, char **av)
 	char *line;
 	size_t line_size;
 	char **tokens;
+	int result;
+	int size;
 
 	head = path_in_list();
 
@@ -132,7 +132,7 @@ int main(int ac, char **av)
 		tokens = tokenize(&line, &tokens);
 
 		/* Call to shelloc in shelloc.c - */
-		result = exectute_command(args);
+		result = exectute_command(tokens);
 
 		free_tokens(tokens);
 
