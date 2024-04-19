@@ -17,11 +17,11 @@ MAGENTA := \033[35m
 PROGRAM_NAME := $(BLUE)$(BOLD)(MAKE)=>$(RESET)
 
 # Variables que podes cambiar
-DEFAULT_OUTPUT := sharrot
+DEFAULT_OUTPUT := shelloc_holmes
 CFLAGS := -Wall -Werror -Wextra -pedantic -std=gnu89
 EXTRACFLAGS := -g
 OFLAGS := 
-VALGRINDFLAGS := -s --leak-check=full
+VALGRINDFLAGS := -s --leak-check=full --show-leak-kinds=all
 
 # Ejecutado al hacer "make", despues de revisar los .o
 .PHONY: all
