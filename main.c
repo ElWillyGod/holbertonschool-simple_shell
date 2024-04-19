@@ -116,9 +116,7 @@ int main(int ac, char **av)
 
 	path_head = path_in_list();
 	if (ac == 2)
-	{
 		return (shelloc_file(av[1]));
-	}
 	if (!isatty(stdin->_fileno))
 		piper = 1;
 	signal(SIGINT, SIG_IGN);

@@ -96,7 +96,7 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	if (command)
 		run_program(command, args);
 	else
-		perror("Command not found. Burro.");
+		perror("Command not found");
 	free(command);
 }
 
