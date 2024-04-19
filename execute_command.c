@@ -85,7 +85,7 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	first_arg = args[0];
 
 	/* Check if executable */
-	if (access(first_arg, X_OK) == 1)
+	if (access(first_arg, X_OK) == 0)
 	{
 		run_program(first_arg, args);
 		return;

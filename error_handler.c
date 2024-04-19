@@ -2,7 +2,7 @@
 /**
  * error_handler - handles error.
  *
- * @errno: errno.
+ * @errnum: errno.
  */
 void error_handler(int errnum)
 {
