@@ -9,6 +9,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 
 extern char **environ;
 
@@ -24,26 +25,54 @@ typedef struct rep_list
 	struct rep_list *next;
 } Tlist;
 
+/**
+ * struct bi_s - asdfg
+ *
+ * @command: asdfg
+ * @func: asdfg
+ */
+typedef struct bi_s
+{
+	char *command;
+	void (*func)(char **, int *);
+} bi_t;
+
+
+/* str_tools.c */
 unsigned int _strlen(char *str);
 char *_strcpy(char *dest, char *src);
-char *_utoa(char *str, unsigned int uinteger, unsigned int ulen);
 char *_strdup(char *str);
 int _strcmp(char *s1, char *s2);
 
+/* int_tools.c */
+int _isdigit(int c);
+int _atoi(char *s);
+
+/* strtok.c */
+char *_strtok(char *, char *);
+
+/**/
 size_t memory_used(void *ptr);
 void *_realloc(void *ptr, size_t size);
 
+/**/
 void free_list(Tlist *list);
 Tlist *path_in_list();
 
+/* get_env */
 char *_getenv(const char *var);
 
-char *direct_command(char *command, Tlist *path_list);
-int execute_command(char **args, Tlist *path_list);
+/* built_ins.c */
+int is_built_in(char **args, int *main_loop);
 
-void error_handler(int errno);
+/* execute.c */
+void execute_command(char **args, Tlist *path_head, int *main_loop);
 
-extern Tlist *head;
+/* separator.c */
+void separator(char **args, Tlist *path_head, int *main_loop);
+
+/* error_handler.c */
+void error_handler(int errnum);
 
 #endif /* MAIN_H */
 

@@ -106,9 +106,8 @@ int main(int ac, char **av)
 	char *line;
 	size_t line_size;
 	char **tokens;
-	ssize_t result1;
-	int result2;
 	Tlist *path_head;
+	int main_loop;
 
 	path_head = path_in_list();
 	if (ac == 2)
@@ -120,29 +119,22 @@ int main(int ac, char **av)
 	tokens = malloc(sizeof(char *));
 	line = NULL;
 	line_size = 0;
-	while (1)
+	main_loop = 1;
+	while (main_loop)
 	{
 		printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
-		result1 = getline(&line, &line_size, stdin);
-		if (result1 == -1)
-			break;
+
+		getline(&line, &line_size, stdin);
 		tokens = tokenize(line, tokens);
-		if (_strcmp(tokens[0], "exit") == 0)
-		{
-			free_tokens(tokens);
-			break;
-		}
-		result2 = execute_command(tokens, path_head);
+
+		separator(tokens, path_head, &main_loop);
+
 		free_tokens(tokens);
-		if (result2 == -2)
-			break;
-		else if (result2 != 0)
-			error_handler(result2);
 	}
 	free_list(path_head);
 	free(line);
 	free(tokens);
-	return (0);
+	return (errno);
 }
 
 

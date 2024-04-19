@@ -4,7 +4,7 @@
  *
  * @errno: errno.
  */
-void error_handler(int errno)
+void error_handler(int errnum)
 {
-	errno += 1;
+	errnum += 1;
 }
