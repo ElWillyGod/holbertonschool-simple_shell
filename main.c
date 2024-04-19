@@ -83,13 +83,17 @@ static char **tokenize(char *line, char **tokens)
  * shelloc_file - Runs shell on the file given.
  *
  * @filename: Path to file.
+ *
+ * Return: 0.
  */
-void shelloc_file(char *filename)
+static int shelloc_file(char *filename)
 {
 	int fd;
 
 	fd = open(filename, O_RDONLY);
 	close(fd);
+
+	return (errno);
 }
 
 
@@ -103,33 +107,33 @@ void shelloc_file(char *filename)
  */
 int main(int ac, char **av)
 {
-	char *line;
-	size_t line_size;
-	char **tokens;
-	Tlist *path_head;
-	int main_loop;
+	char *line = NULL;
+	size_t line_size = 0;
+	char **tokens = NULL;
+	Tlist *path_head = NULL;
+	int main_loop = 1;
+	int piper = 0;
 
 	path_head = path_in_list();
 	if (ac == 2)
 	{
-		shelloc_file(av[1]);
-		return (0);
+		return (shelloc_file(av[1]));
 	}
+	if (!isatty(stdin->_fileno))
+		piper = 1;
 	signal(SIGINT, SIG_IGN);
 	tokens = malloc(sizeof(char *));
-	line = NULL;
-	line_size = 0;
-	main_loop = 1;
 	while (main_loop)
 	{
-		printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
-
-		getline(&line, &line_size, stdin);
+		if (!piper)
+			printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
+		if (getline(&line, &line_size, stdin) <= 0)
+			break;
 		tokens = tokenize(line, tokens);
-
 		separator(tokens, path_head, &main_loop);
-
 		free_tokens(tokens);
+		if (piper)
+			break;
 	}
 	free_list(path_head);
 	free(line);
