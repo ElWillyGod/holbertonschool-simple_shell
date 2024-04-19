@@ -1,4 +1,6 @@
 #include "main.h"
+#include <stdio.h>
+#include <unistd.h>
 
 /* Built ins should have args and main_loop as arguments, and be void*/
 
@@ -33,8 +35,21 @@ void exit_main(char **args, int *main_loop)
  */
 void cd(char **args, __attribute__((unused)) int *main_loop)
 {
+	char *rute;
+
 	if (args[1])
+	{
 		printf("%s\n", args[1]);
+
+		if (chdir(args[1]) != 0)
+			perror("no such file or directory");
+	}
+	else
+	{
+		rute = _getenv("HOME");
+		rute ? chdir(rute), (void)printf("~\n") : perror("no tiene HOME??");
+		free(rute);
+	}
 }
 
 /**
