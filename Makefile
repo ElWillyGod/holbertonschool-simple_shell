@@ -1,4 +1,4 @@
-# Version 0.2
+# Version 0.3
 # Variables internas
 SHELL :=/bin/bash
 CC := gcc
@@ -19,7 +19,7 @@ PROGRAM_NAME := $(BLUE)$(BOLD)(MAKE)=>$(RESET)
 # Variables que podes cambiar
 DEFAULT_OUTPUT := shelloc_holmes
 CFLAGS := -Wall -Werror -Wextra -pedantic -std=gnu89
-EXTRACFLAGS := -g
+EXTRACFLAGS := 
 OFLAGS := 
 VALGRINDFLAGS := -s --leak-check=full --show-leak-kinds=all
 
@@ -29,8 +29,6 @@ all: $(OFILES)
 	@echo -e "$(PROGRAM_NAME)$(YELLOW) Linking compiled files...$(RESET)"
 	@$(CC) $(OFLAGS) $^ -o $(DEFAULT_OUTPUT)
 	@echo -e "$(PROGRAM_NAME)$(GREEN) Compilation and linking was successful, dumped in $(DEFAULT_OUTPUT).$(RESET)\n"
-	@echo -e "$(PROGRAM_NAME)$(YELLOW) Running Betty on c files...$(RESET)"
-	@betty *.c
 ifeq ($(strip $(HFILES)),)
 	@wait
 else
@@ -45,8 +43,9 @@ endif
 
 # Si %.o no existe o %.c es nuevo que %.o gececear con -c y cflags
 %.o: %.c
-	@echo -e "$(PROGRAM_NAME)$(YELLOW) Compiling $@...$(RESET)"
+	@echo -e "$(PROGRAM_NAME)$(YELLOW) Compiling $?...$(RESET)"
 	@$(CC) -c $(CFLAGS) $(EXTRACFLAGS) $^ -o $@
+	@betty $?
 
 # Creo que no es ni necesario pero no quero romper todo
 %.c:
