@@ -11,7 +11,6 @@
 static char *direct_command(char *command, Tlist *path_head)
 {
 	Tlist *current;
-	size_t size;
 	char *aux;
 
 	current = path_head;
@@ -20,8 +19,7 @@ static char *direct_command(char *command, Tlist *path_head)
 
 	while (current)
 	{
-		size = _strlen(current->direct) + _strlen(command) + 2;
-		aux = malloc(size);
+		aux = malloc(_strlen(current->direct) + _strlen(command) + 2);
 		sprintf(aux, "%s/%s", current->direct, command);
 
 		if (access(aux, X_OK) == 0)
@@ -36,7 +34,6 @@ static char *direct_command(char *command, Tlist *path_head)
 	return (NULL);
 }
 
-
 /**
  * run_program - Runs a found program.
  *
@@ -45,6 +42,7 @@ static char *direct_command(char *command, Tlist *path_head)
  *
  * Return: int
  */
+
 static void run_program(char *path, char **av)
 {
 	pid_t child_pid;
@@ -70,6 +68,7 @@ static void run_program(char *path, char **av)
 * @path_head: Head of list path.
 * @main_loop: Pointer to the boolean var of the main loop.
 */
+
 void execute_command(char **args, Tlist *path_head, int *main_loop)
 {
 	char *command;
@@ -99,5 +98,3 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 		perror("Command not found");
 	free(command);
 }
-
-

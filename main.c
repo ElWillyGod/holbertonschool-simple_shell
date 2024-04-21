@@ -1,7 +1,5 @@
 #include "main.h"
-
-#define RED "\033[31m"
-#define RESET "\033[0m"
+#include <signal.h>
 
 /**
  * free_tokens - Frees the malloc'd tokens in the tokens list.
