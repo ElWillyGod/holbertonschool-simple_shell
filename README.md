@@ -1,5 +1,5 @@
 # Simple Shell
-![](https://ideogram.ai/api/images/direct/uU9J_UzMTVaz-1XM2g5QUw.png)
+![Shelloc Homes](https://ideogram.ai/api/images/direct/uU9J_UzMTVaz-1XM2g5QUw.png)
 ## Description
 Shelloc Homes is a unique basic command interpreter that allows you to explore the limits of command execution, this tool is written in the powerful C language
 The program works based on bash commands acquired from the command line interface (CLI).The command typed by the user is executed as a terminal UNIX shell
@@ -14,7 +14,7 @@ The program works based on bash commands acquired from the command line interfac
 | get_func.c | Functions created from the stdlib library |
 |execute_command.c| Functions responsible for validation, search and execution of commands|
 | error_handler.c| error manager and message generation |
-|built-ins.c| Sherlock Holmes own commands |
+|built-ins.c| Shelloc Holmes own commands |
 
 ## Install
 
