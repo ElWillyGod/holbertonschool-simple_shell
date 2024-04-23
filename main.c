@@ -113,27 +113,30 @@ int main(int ac, char **av)
 	int piper = 0;
 
 	path_head = path_in_list();
+
 	if (ac == 2)
 		return (shelloc_file(av[1]));
+
 	if (!isatty(stdin->_fileno))
 		piper = 1;
+
 	signal(SIGINT, SIG_IGN);
 	tokens = malloc(sizeof(char *));
-	while (main_loop)
-	{
+	do {
 		if (!piper)
 			printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
+
 		if (getline(&line, &line_size, stdin) <= 0)
 			break;
+
 		tokens = tokenize(line, tokens);
-		separator(tokens, path_head, &main_loop);
+		execute_command(tokens, path_head, &main_loop);
 		free_tokens(tokens);
-		if (piper)
-			break;
-	}
-	free_list(path_head);
-	free(line);
-	free(tokens);
+
+	} while (main_loop && !piper);
+
+	free_list(path_head), free(line), free(tokens);
+
 	return (errno);
 }
 

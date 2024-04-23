@@ -18,11 +18,11 @@ void free_list(Tlist *list)
 	}
 }
 /**
- * tokenize_path - Tokenizes and adds to list the PATH env var.
+ * tokenize_path - Separates the PATH environment and converts it to a list
  *
  * @path_copy: Copy of the var PATH.
  *
- * Return: (head).
+ * Return: list head;
  */
 Tlist *tokenize_path(char *path_copy)
 {
@@ -88,7 +88,7 @@ Tlist *path_in_list(void)
 	if (!path_copy)
 	{
 		fprintf(stderr, "Malloc error.");
-		exit(20);
+		exit(19);
 	}
 
 	free(path);
