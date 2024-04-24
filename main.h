@@ -55,8 +55,8 @@ int _atoi(char *s);
 char *_strtok(char *, char *);
 
 /**/
-size_t memory_used(void *ptr);
-void *_realloc(void *ptr, size_t size);
+char *_memcpy(char *dest, char *src, unsigned int n);
+void *my_realloc(void *ptr, size_t old_size, size_t new_size);
 
 /**/
 void free_list(Tlist *list);

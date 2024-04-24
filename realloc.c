@@ -1,62 +1,54 @@
 #include "main.h"
 /**
- * memory_used - Gets memory used.
+ * _memcpy - cpies memory area
  *
- * @ptr: Pointer to memory.
+ * @dest: Destination memory area
+ * @src: Source memory area
+ * @n: Amount of memory byte
  *
- * Return: Size of memory used.
+ * Return: pointer a dest
  */
-size_t memory_used(void *ptr)
+char *_memcpy(char *dest, char *src, unsigned int n)
 {
-	char *memory;
-	size_t size;
+	unsigned int i;
 
-	if (!ptr)
-		return (0);
+	for (i = 0; i < n; i++)
+		dest[i] = src[i];
 
-	memory = (char *)ptr - sizeof(size_t);
-	size = *(size_t *)memory;
-	size -= sizeof(size_t);
-
-	return (size);
+	return (dest);
 }
 
 /**
-* _realloc - Reallocates allocated memory.
+* my_realloc - Reallocates allocated memory.
 *
 * @ptr: Pointer to memory.
-* @size: Size to allocate the new location.
+* @old_size: la antigua memoia.
+* @new_size: nuevo tamanio de memory;
 *
 * Return: Pointer to newly allocated memory.
 */
-
-void *_realloc(void *ptr, size_t size)
+void *my_realloc(void *ptr, size_t old_size, size_t new_size)
 {
-	size_t i;
-	size_t size_old;
 	void *new_ptr;
-	size_t size_min;
 
-	if (!ptr)
-		return (malloc(size));
-
-	if (!size)
+	if (new_size == 0)
 	{
 		free(ptr);
 		return (NULL);
 	}
 
-	size_old = memory_used(ptr);
-	new_ptr = malloc(size);
+	new_ptr = malloc(new_size);
 
-	if (!new_ptr)
+	if (new_ptr == NULL)
 		return (NULL);
 
-	size_min = (size < size_old) ? size : size_old;
+	if (old_size < new_size)
+		_memcpy(new_ptr, ptr, old_size);
 
-	for (i = 0; i < size_min; i++)
-		((char *)new_ptr)[i] = ((char *)ptr)[i];
-
+	else
+		_memcpy(new_ptr, ptr, new_size);
+	
 	free(ptr);
+
 	return (new_ptr);
 }
