@@ -1,5 +1,6 @@
 #include "main.h"
 #include <stdio.h>
+#include <sys/cdefs.h>
 #include <unistd.h>
 
 /* Built ins should have args and main_loop as arguments, and be void*/
@@ -53,6 +54,26 @@ void cd(char **args, __attribute__((unused)) int *main_loop)
 }
 
 /**
+ *print_env - imprime las variables de entorno
+ *
+ *@args: void;
+ *@main_loop: void tambien;
+ *
+ *Return: void solo imprime;
+ */
+
+void print_env(__attribute__((unused)) char **args,
+	       __attribute__((unused)) int *main_loop)
+{
+	/* print event*/
+	int i;
+
+	for (i = 0; environ[i]; i++)
+		printf("%s\n", environ[i]);
+
+}
+
+/**
  * is_built_in - Checks if command is a built-in
  *
  * @args: List of arguments.
@@ -64,10 +85,13 @@ int is_built_in(char **args, int *main_loop)
 {
 	bi_t built_ins[] = {
 		{"exit", exit_main},
-		{"cd", cd}};
+		{"cd", cd},
+		{"env", print_env},
+		{NULL, NULL}
+	};
 	int i;
 
-	for (i = 0; i < 2; i++)
+	for (i = 0; built_ins[i].func; i++)
 	{
 		if (_strcmp(built_ins[i].command, args[0]) == 0)
 		{
