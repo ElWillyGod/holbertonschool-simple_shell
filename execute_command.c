@@ -106,10 +106,9 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 
 	if (!path_head)
 	{
-		perror(first_arg);
-		exit(127);
+    		fprintf(stderr, "%s: not found\n", first_arg);
+    		exit(127);
 	}
-
 	command = direct_command(first_arg, path_head);
 	if (command)
 		run_program(command, args);

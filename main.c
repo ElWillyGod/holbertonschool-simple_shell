@@ -124,7 +124,9 @@ int main(int ac, char **av)
 		return (shelloc_file(av[1]));
 	if (!isatty(stdin->_fileno))
 		piper = 1;
+
 	signal(SIGINT, SIG_IGN);
+	
 	tokens = malloc(sizeof(char *));
 	if (piper)
 	{
@@ -149,5 +151,4 @@ int main(int ac, char **av)
 	free_list(path_head), free(line), free(tokens);
 	exit(EXIT_SUCCESS);
 }
-
 
