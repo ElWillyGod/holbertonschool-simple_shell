@@ -15,8 +15,6 @@ static char *direct_command(char *command, Tlist *path_head)
 	char *aux;
 
 	current = path_head;
-	if (!current)
-		return (NULL);
 
 	while (current)
 	{
@@ -90,9 +88,6 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	if (is_built_in(args, main_loop))
 		return;
 
-	if (!path_head)
-		exit(127);
-
 	first_arg = args[0];
 
 	/* Check if executable */
@@ -108,6 +103,11 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	}
 
 	/* Check in PATH if executable */
+
+	if (!path_head)
+		exit(127);
+
+
 	command = direct_command(first_arg, path_head);
 	if (command)
 		run_program(command, args);
