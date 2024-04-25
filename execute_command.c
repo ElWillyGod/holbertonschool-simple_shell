@@ -38,11 +38,12 @@ static char *direct_command(char *command, Tlist *path_head)
  *
  * @path: path
  * @av: args.
+ * @exit_estatus: estado se dalida
  *
  * Return: int
  */
 
-static void run_program(char *path, char **av)
+static void run_program(char *path, char **av, int *exit_estatus)
 {
 	pid_t child_pid;
 	int status;
@@ -65,6 +66,7 @@ static void run_program(char *path, char **av)
 	else
 	{
 		wait(&status);
+	*exit_estatus = WEXITSTATUS(status);
 	}
 }
 
@@ -80,6 +82,7 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 {
 	char *command;
 	char *first_arg;
+	int exit_estatus;
 
 	if (!args || !args[0])
 		return;
@@ -95,7 +98,7 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	{
 		if (access(first_arg, X_OK) == 0)
 		{
-			run_program(first_arg, args);
+			run_program(first_arg, args, &exit_estatus);
 			return;
 		}
 		perror(first_arg);
@@ -104,15 +107,15 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 
 	/* Check in PATH if executable */
 
-	if (!path_head)
-	{
-    		fprintf(stderr, "%s: not found\n", first_arg);
-    		exit(127);
-	}
 	command = direct_command(first_arg, path_head);
 	if (command)
-		run_program(command, args);
+		run_program(command, args, &exit_estatus);
 	else
 		perror(first_arg);
 	free(command);
+
+	if (WIFEXITED(exit_estatus))
+		exit(WEXITSTATUS(exit_estatus));
+	else
+		exit(EXIT_FAILURE);
 }
