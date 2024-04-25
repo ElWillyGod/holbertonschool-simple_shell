@@ -58,7 +58,9 @@ static void run_program(char *path, char **av)
 	if (child_pid == 0)
 		execve(path, av, environ);
 	else
+	{
 		wait(&status);
+	}
 }
 
 /**

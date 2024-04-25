@@ -137,6 +137,7 @@ int main(int ac, char **av)
 
 	free_list(path_head), free(line), free(tokens);
 
+	errno = 0;
 	return (errno);
 }
 
