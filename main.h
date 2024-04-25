@@ -15,6 +15,8 @@ extern char **environ;
 
 #define RED "\033[31m"
 #define RESET "\033[0m"
+#define FAIL (-1)
+
 
 /**
  * struct rep_list - Singly linked list's node of path.

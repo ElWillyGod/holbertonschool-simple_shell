@@ -1,5 +1,6 @@
 #include "main.h"
 #include <signal.h>
+#include <stdlib.h>
 
 /**
  * free_tokens - Frees the malloc'd tokens in the tokens list.
@@ -32,7 +33,7 @@ char **add_token_to_tokens(char *token, size_t *tokens_size,
 	if (!tokens)
 	{
 		perror("Malloc fail");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	if (token)
@@ -41,7 +42,7 @@ char **add_token_to_tokens(char *token, size_t *tokens_size,
 		if (!tokens[*tokens_size - 1])
 		{
 			perror("Malloc fail");
-			exit(2);
+			exit(EXIT_FAILURE);
 		}
 	}
 	else
@@ -147,7 +148,7 @@ int main(int ac, char **av)
 	}
 
 	free_list(path_head), free(line), free(tokens);
-	return (errno);
+	exit(EXIT_SUCCESS);
 }
 
 

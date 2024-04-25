@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stdlib.h>
 
 /**
 * direct_command - Finds if in path and then executes.
@@ -56,7 +57,13 @@ static void run_program(char *path, char **av)
 	}
 
 	if (child_pid == 0)
-		execve(path, av, environ);
+	{
+		if (execve(path, av, environ) == -1)
+		{
+			perror("execve fail");
+			exit(EXIT_FAILURE);
+		}
+	}
 	else
 	{
 		wait(&status);
