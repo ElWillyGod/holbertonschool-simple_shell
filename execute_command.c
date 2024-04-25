@@ -38,12 +38,11 @@ static char *direct_command(char *command, Tlist *path_head)
  *
  * @path: path
  * @av: args.
- * @exit_estatus: estado se dalida
  *
  * Return: int
  */
 
-static void run_program(char *path, char **av, int *exit_estatus)
+static void run_program(char *path, char **av)
 {
 	pid_t child_pid;
 	int status;
@@ -66,7 +65,6 @@ static void run_program(char *path, char **av, int *exit_estatus)
 	else
 	{
 		wait(&status);
-	*exit_estatus = WEXITSTATUS(status);
 	}
 }
 
@@ -82,7 +80,6 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 {
 	char *command;
 	char *first_arg;
-	int exit_estatus;
 
 	if (!args || !args[0])
 		return;
@@ -98,24 +95,20 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	{
 		if (access(first_arg, X_OK) == 0)
 		{
-			run_program(first_arg, args, &exit_estatus);
+			run_program(first_arg, args);
 			return;
 		}
 		perror(first_arg);
 		return;
 	}
 
-	/* Check in PATH if executable */
+	/* Check in PATH if executable 
+	* aca tiene que haber magia*/
 
 	command = direct_command(first_arg, path_head);
 	if (command)
-		run_program(command, args, &exit_estatus);
+		run_program(command, args);
 	else
 		perror(first_arg);
 	free(command);
-
-	if (WIFEXITED(exit_estatus))
-		exit(WEXITSTATUS(exit_estatus));
-	else
-		exit(EXIT_FAILURE);
 }
