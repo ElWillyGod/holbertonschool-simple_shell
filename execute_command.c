@@ -90,6 +90,9 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	if (is_built_in(args, main_loop))
 		return;
 
+	if (!path_head)
+		exit(127);
+
 	first_arg = args[0];
 
 	/* Check if executable */
