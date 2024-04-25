@@ -132,7 +132,7 @@ char **go_through_tokens(char **tokens, char **subarray,
 			execute_command(subarray, path_head, main_loop);
 			if (execute_skipper(errno, l))
 				skip = 1;
-			*sub_len = 1;
+			*sub_len = 0;
 		}
 		else if (!skip)
 		{
