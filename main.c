@@ -65,7 +65,6 @@ static char **tokenize(char *line, char **tokens, char *separators)
 {
 	size_t tokens_size;
 	char *token;
-	char *line_cpy;
 
 	tokens_size = 0;
 	if (!line)
@@ -73,13 +72,7 @@ static char **tokenize(char *line, char **tokens, char *separators)
 		tokens = add_token_to_tokens(NULL, &tokens_size, tokens);
 		return (tokens);
 	}
-	line_cpy = strdup(line);
-	if (!line_cpy)
-	{
-		perror("Malloc error");
-		return (NULL);
-	}
-	token = strtok(line_cpy, separators);
+	token = strtok(line, separators);
 	while (token)
 	{
 		tokens = add_token_to_tokens(token, &tokens_size, tokens);
@@ -87,7 +80,6 @@ static char **tokenize(char *line, char **tokens, char *separators)
 	}
 
 	tokens = add_token_to_tokens(NULL, &tokens_size, tokens);
-	free(line_cpy);
 	return (tokens);
 }
 
@@ -140,18 +132,15 @@ int main(int ac, char **av)
 	do {
 		if (!piper)
 			printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
-
 		if (getline(&line, &line_size, stdin) <= 0)
 			break;
-
 		lines = tokenize(line, lines, "\n");
-
 		for (i = 0; lines[i]; i++)
 		{
 			tokens = tokenize(lines[i], tokens, " \t");
 			execute_command(tokens, path_head, &main_loop);
+			free_tokens(tokens);
 		}
-		free_tokens(tokens);
 		free_tokens(lines);
 	} while (main_loop && !piper);
 

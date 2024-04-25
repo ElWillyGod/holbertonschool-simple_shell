@@ -102,8 +102,6 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	if (command)
 		run_program(command, args);
 	else
-	{
 		perror(first_arg);
-	}
 	free(command);
 }
