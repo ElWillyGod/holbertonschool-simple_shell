@@ -132,7 +132,7 @@ int main(int ac, char **av)
 		while (getline(&line, &line_size, stdin) > 0 && main_loop)
 		{
 			tokens = tokenize(line, tokens, " \t\n");
-			separator(tokens, path_head, &main_loop);
+			execute_command(tokens, path_head, &main_loop);
 			free_tokens(tokens);
 		}
 	}
@@ -142,7 +142,7 @@ int main(int ac, char **av)
 			printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
 			getline(&line, &line_size, stdin);
 			tokens = tokenize(line, tokens, " \t\n");
-			separator(tokens, path_head, &main_loop);
+			execute_command(tokens, path_head, &main_loop);
 			free_tokens(tokens);
 		} while (main_loop);
 	}
