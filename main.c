@@ -113,38 +113,40 @@ int main(int ac, char **av)
 {
 	char *line = NULL;
 	size_t line_size = 0;
-	char **tokens, **lines = NULL;
+	char **tokens;
 	Tlist *path_head = NULL;
-	int main_loop = 1, piper = 0, i = 0;
+	int main_loop = 1, piper = 0;
 
 	path_head = path_in_list();
 
 	if (ac == 2)
 		return (shelloc_file(av[1]));
-
 	if (!isatty(stdin->_fileno))
 		piper = 1;
 	errno = 0;
-
 	signal(SIGINT, SIG_IGN);
 	tokens = malloc(sizeof(char *));
-	lines = malloc(sizeof(char *));
-	do {
-		if (!piper)
-			printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
-		if (getline(&line, &line_size, stdin) <= 0)
-			break;
-		lines = tokenize(line, lines, "\n");
-		for (i = 0; lines[i]; i++)
+	if (piper)
+	{
+		while (getline(&line, &line_size, stdin) > 0 && main_loop)
 		{
-			tokens = tokenize(lines[i], tokens, " \t");
+			tokens = tokenize(line, tokens, " \t\n");
 			execute_command(tokens, path_head, &main_loop);
 			free_tokens(tokens);
 		}
-		free_tokens(lines);
-	} while (main_loop && !piper);
+	}
+	else
+	{
+		do {
+			printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
+			getline(&line, &line_size, stdin);
+			tokens = tokenize(line, tokens, " \t\n");
+			execute_command(tokens, path_head, &main_loop);
+			free_tokens(tokens);
+		} while (main_loop);
+	}
 
-	free_list(path_head), free(line), free(tokens), free(lines);
+	free_list(path_head), free(line), free(tokens);
 	return (errno);
 }
 
