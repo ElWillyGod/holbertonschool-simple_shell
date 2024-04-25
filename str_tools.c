@@ -1,4 +1,5 @@
 #include "main.h"
+
 /**
  * _strlen - Gets length of a string.
  *
@@ -83,7 +84,8 @@ char *_strdup(char *str)
 }
 
 /**
- * _strcmp - compare two strings
+ * _strcmp - Compares two strings.
+ *
  * @s1: string 1
  * @s2: string 2
  *
@@ -99,13 +101,9 @@ int _strcmp(char *s1, char *s2)
 	}
 
 	if (*s1 == *s2)
-	{
 		return (0);
-	}
 	else
-	{
 		return (*s1 - *s2);
-	}
 }
 
 

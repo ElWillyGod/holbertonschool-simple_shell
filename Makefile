@@ -19,7 +19,7 @@ PROGRAM_NAME := $(BLUE)$(BOLD)(MAKE)=>$(RESET)
 # Variables que podes cambiar
 DEFAULT_OUTPUT := shelloc_holmes
 CFLAGS := -Wall -Werror -Wextra -pedantic -std=gnu89
-EXTRACFLAGS := 
+EXTRACFLAGS := -g
 OFLAGS := 
 VALGRINDFLAGS := -s --leak-check=full --show-leak-kinds=all
 

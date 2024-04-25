@@ -19,7 +19,7 @@ char *_memcpy(char *dest, char *src, unsigned int n)
 }
 
 /**
-* my_realloc - Reallocates allocated memory.
+* _realloc - Reallocates allocated memory.
 *
 * @ptr: Pointer to memory.
 * @old_size: la antigua memoia.

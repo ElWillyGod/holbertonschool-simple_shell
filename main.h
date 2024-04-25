@@ -56,7 +56,7 @@ char *_strtok(char *, char *);
 
 /**/
 char *_memcpy(char *dest, char *src, unsigned int n);
-void *my_realloc(void *ptr, size_t old_size, size_t new_size);
+void *_realloc(void *ptr, size_t old_size, size_t new_size);
 
 /**/
 void free_list(Tlist *list);
@@ -72,7 +72,7 @@ int is_built_in(char **args, int *main_loop);
 void execute_command(char **args, Tlist *path_head, int *main_loop);
 
 /* separator.c */
-void separator();
+void separator(char **tokens, Tlist *path_head, int *main_loop);
 
 /* error_handler.c */
 void error_handler(int errnum);

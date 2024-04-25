@@ -74,7 +74,7 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	char *command;
 	char *first_arg;
 
-	if (!args[0])
+	if (!args || !args[0])
 		return;
 
 	/* Check if built-in */

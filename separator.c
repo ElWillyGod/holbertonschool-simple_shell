@@ -1,4 +1,4 @@
-#include <main.h>
+#include "main.h"
 
 
 /**
@@ -11,10 +11,10 @@
 static int check_if_operator(char *s)
 {
 	int i;
-	char operators[3][2] = [";", "&&", "||"];
+	char operators[3][3] = {";\0", "&&", "||"};
 
 	for (i = 0; i < 3; i++)
-		if (_strcmp(s, operators[i]))
+		if (_strcmp(s, operators[i]) == 0)
 			return (i);
 
 	return (-1);
@@ -30,7 +30,7 @@ static int check_if_operator(char *s)
  */
 static int execute_skipper(int errorno, int operator)
 {
-	if (opearator == 0)
+	if (operator == 0)
 		return (1);
 	if (operator == 1)
 		return (errorno == 0);
@@ -58,7 +58,7 @@ static int check_for_errors(char **tokens)
 	}
 	for (i = 0, len = 1; tokens[i]; i++)
 	{
-		operator = check_if_operator(errno, tokens[i]);
+		operator = check_if_operator(tokens[i]);
 		if (operator >= 0)
 		{
 			if (len == 1)
@@ -94,8 +94,8 @@ static int check_for_errors(char **tokens)
  */
 static char **subarray_add(char **subarray, unsigned int *sub_len, char *s)
 {
-	sub_len += 1;
-	subarray = _realloc(subarray, sizeof(char *) * sub_len);
+	subarray = realloc(subarray, sizeof(char *) * (*sub_len + 1));
+	*sub_len += 1;
 	if (!subarray)
 	{
 		perror("Realloc error");
@@ -103,7 +103,7 @@ static char **subarray_add(char **subarray, unsigned int *sub_len, char *s)
 		return (NULL);
 	}
 
-	subarray[sub_len - 1] = s;
+	subarray[*sub_len - 1] = s;
 
 	return (subarray);
 }
@@ -122,11 +122,14 @@ void separator(char **tokens, Tlist *path_head, int *main_loop)
 	char **subarray;
 
 	if (check_for_errors(tokens))
-		return (-1);
+		return;
 	subarray = malloc(sizeof(char *));
 	if (!subarray)
-		perror("Malloc error"), return (-1);
-	for (i = 0, sub_len = 1, skip = 0; tokens[i]; i++)
+	{
+		perror("Malloc error");
+		return;
+	}
+	for (i = 0, sub_len = 0, skip = 0; tokens[i]; i++)
 	{
 		operator = check_if_operator(tokens[i]);
 		if (operator >= 0)
@@ -138,7 +141,7 @@ void separator(char **tokens, Tlist *path_head, int *main_loop)
 			}
 			subarray = subarray_add(subarray, &sub_len, NULL);
 			if (!subarray)
-				return (-1);
+				return;
 			execute_command(subarray, path_head, main_loop);
 			if (execute_skipper(errno, operator))
 				skip = 1;
@@ -148,11 +151,17 @@ void separator(char **tokens, Tlist *path_head, int *main_loop)
 		{
 			subarray = subarray_add(subarray, &sub_len, tokens[i]);
 			if (!subarray)
-				return (-1);
+				return;
 		}
 	}
+	if (sub_len > 0)
+	{
+		subarray = subarray_add(subarray, &sub_len, NULL);
+		if (!subarray)
+			return;
+		execute_command(subarray, path_head, main_loop);
+	}
 	free(subarray);
-	return (0);
 }
 
 
