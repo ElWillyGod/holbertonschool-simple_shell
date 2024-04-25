@@ -91,6 +91,7 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 			run_program(first_arg, args);
 			return;
 		}
+		errno = 127;
 		perror(first_arg);
 		return;
 	}
@@ -100,6 +101,9 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	if (command)
 		run_program(command, args);
 	else
+	{
+		errno = 127;
 		perror(first_arg);
+	}
 	free(command);
 }
