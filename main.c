@@ -23,7 +23,7 @@ static void free_tokens(char **tokens)
  *
  * Return: Reallocated pointer of tokens.
  */
-static char **add_token_to_tokens(char *token, size_t *tokens_size,
+char **add_token_to_tokens(char *token, size_t *tokens_size,
 		char **tokens)
 {
 	*tokens_size += 1;
@@ -57,24 +57,37 @@ static char **add_token_to_tokens(char *token, size_t *tokens_size,
  *
  * @line: Line to tokenize.
  * @tokens: Malloc'd list to save tokens.
+ * @separators: asdfg
  *
  * Return: List of malloc'd tokens.
  */
-static char **tokenize(char *line, char **tokens)
+static char **tokenize(char *line, char **tokens, char *separators)
 {
 	size_t tokens_size;
 	char *token;
+	char *line_cpy;
 
 	tokens_size = 0;
-	token = strtok(line, " \n\t");
+	if (!line)
+	{
+		tokens = add_token_to_tokens(NULL, &tokens_size, tokens);
+		return (tokens);
+	}
+	line_cpy = strdup(line);
+	if (!line_cpy)
+	{
+		perror("Malloc error");
+		return (NULL);
+	}
+	token = strtok(line_cpy, separators);
 	while (token)
 	{
 		tokens = add_token_to_tokens(token, &tokens_size, tokens);
-		token = strtok(NULL, " \n\t");
+		token = strtok(NULL, separators);
 	}
 
 	tokens = add_token_to_tokens(NULL, &tokens_size, tokens);
-
+	free(line_cpy);
 	return (tokens);
 }
 
@@ -108,10 +121,9 @@ int main(int ac, char **av)
 {
 	char *line = NULL;
 	size_t line_size = 0;
-	char **tokens = NULL;
+	char **tokens, **lines = NULL;
 	Tlist *path_head = NULL;
-	int main_loop = 1;
-	int piper = 0;
+	int main_loop = 1, piper = 0, i = 0;
 
 	path_head = path_in_list();
 
@@ -120,9 +132,11 @@ int main(int ac, char **av)
 
 	if (!isatty(stdin->_fileno))
 		piper = 1;
+	errno = 0;
 
 	signal(SIGINT, SIG_IGN);
 	tokens = malloc(sizeof(char *));
+	lines = malloc(sizeof(char *));
 	do {
 		if (!piper)
 			printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
@@ -130,15 +144,18 @@ int main(int ac, char **av)
 		if (getline(&line, &line_size, stdin) <= 0)
 			break;
 
-		tokens = tokenize(line, tokens);
-		separator(tokens, path_head, &main_loop);
-		free_tokens(tokens);
+		lines = tokenize(line, lines, "\n");
 
+		for (i = 0; lines[i]; i++)
+		{
+			tokens = tokenize(lines[i], tokens, " \t");
+			execute_command(tokens, path_head, &main_loop);
+		}
+		free_tokens(tokens);
+		free_tokens(lines);
 	} while (main_loop && !piper);
 
-	free_list(path_head), free(line), free(tokens);
-
-	errno = 0;
+	free_list(path_head), free(line), free(tokens), free(lines);
 	return (errno);
 }
 

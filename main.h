@@ -77,5 +77,8 @@ void separator(char **tokens, Tlist *path_head, int *main_loop);
 /* error_handler.c */
 void error_handler(int errnum);
 
+/* main.c */
+char **add_token_to_tokens(char *token, size_t *tokens_size, char **tokens);
+
 #endif /* MAIN_H */
 
