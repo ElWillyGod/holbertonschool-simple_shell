@@ -105,8 +105,10 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	/* Check in PATH if executable */
 
 	if (!path_head)
+	{
+		perror(first_arg);
 		exit(127);
-
+	}
 
 	command = direct_command(first_arg, path_head);
 	if (command)
