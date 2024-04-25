@@ -27,7 +27,7 @@ char *_memcpy(char *dest, char *src, unsigned int n)
 *
 * Return: Pointer to newly allocated memory.
 */
-void *my_realloc(void *ptr, size_t old_size, size_t new_size)
+void *_realloc(void *ptr, size_t old_size, size_t new_size)
 {
 	void *new_ptr;
 

@@ -71,6 +71,9 @@ int is_built_in(char **args, int *main_loop);
 /* execute.c */
 void execute_command(char **args, Tlist *path_head, int *main_loop);
 
+/* separator.c */
+void separator();
+
 /* error_handler.c */
 void error_handler(int errnum);
 
