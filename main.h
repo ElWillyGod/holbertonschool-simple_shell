@@ -62,7 +62,7 @@ void *_realloc(void *ptr, size_t old_size, size_t new_size);
 
 /**/
 void free_list(Tlist *list);
-Tlist *path_in_list();
+Tlist *path_in_list(char *env, char *separator);
 
 /* get_env */
 char *_getenv(const char *var);

@@ -20,25 +20,26 @@ void free_list(Tlist *list)
 /**
  * tokenize_path - Separates the PATH environment and converts it to a list
  *
- * @path_copy: Copy of the var PATH.
+ * @environe: Copy of the var PATH.
+ * @separator: ss
  *
  * Return: list head;
  */
-Tlist *tokenize_path(char *path_copy)
+Tlist *tokenize_path(char *environe, char *separator)
 {
 	char *token;
 	Tlist *newNode = NULL;
 	Tlist *head = NULL;
 	Tlist *prev = NULL;
 
-	token = strtok(path_copy, ":");
+	token = strtok(environe, separator);
 	while (token)
 	{
 		newNode = malloc(sizeof(Tlist));
 		if (!newNode)
 		{
 			fprintf(stderr, "Malloc fail.");
-			free(path_copy);
+			free(environe);
 			free_list(head);
 			exit(20);
 		}
@@ -48,7 +49,7 @@ Tlist *tokenize_path(char *path_copy)
 		{
 			fprintf(stderr, "Malloc fail.");
 			free(newNode);
-			free(path_copy);
+			free(environe);
 			free_list(head);
 			exit(21);
 		}
@@ -60,7 +61,7 @@ Tlist *tokenize_path(char *path_copy)
 			head = newNode;
 
 		prev = newNode;
-		token = strtok(NULL, ":");
+		token = strtok(NULL, separator);
 	}
 	return (head);
 }
@@ -68,21 +69,20 @@ Tlist *tokenize_path(char *path_copy)
 
 /**
  * path_in_list - Creates singly linked list of path.
+ * @environe: sad
+ * @separatpr: xd
  *
  * Return: Singly linked list of path.
  */
-Tlist *path_in_list(void)
+Tlist *path_in_list(char *environe, char *separatpr)
 {
 	char *path;
 	char *path_copy;
 	Tlist *head;
 
-	path = _getenv("PATH");
+	path = _getenv(environe);
 	if (!path)
-	{
-		fprintf(stderr, "PATH not found.");
-		exit(19);
-	}
+		return (NULL);
 
 	path_copy = _strdup(path);
 	if (!path_copy)
@@ -93,7 +93,7 @@ Tlist *path_in_list(void)
 
 	free(path);
 
-	head = tokenize_path(path_copy);
+	head = tokenize_path(path_copy, separatpr);
 
 	free(path_copy);
 	return (head);

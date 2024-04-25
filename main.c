@@ -118,7 +118,7 @@ int main(int ac, char **av)
 	Tlist *path_head = NULL;
 	int main_loop = 1, piper = 0;
 
-	path_head = path_in_list();
+	path_head = path_in_list("PATH", ":");
 
 	if (ac == 2)
 		return (shelloc_file(av[1]));
