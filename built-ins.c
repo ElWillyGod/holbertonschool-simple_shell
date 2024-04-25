@@ -69,11 +69,7 @@ void print_env(__attribute__((unused)) char **args,
 	int i;
 
 	for (i = 0; environ[i]; i++)
-	{
-
 		printf("%s\n", environ[i]);
-		printf("printeando environ");
-	}
 
 }
 
