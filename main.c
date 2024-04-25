@@ -118,10 +118,7 @@ int main(int ac, char **av)
 		return (shelloc_file(av[1]));
 
 	if (!isatty(stdin->_fileno))
-	{
-		errno = 25;
 		piper = 1;
-	}
 
 	signal(SIGINT, SIG_IGN);
 	tokens = malloc(sizeof(char *));
