@@ -27,7 +27,8 @@ static char **add_token_to_tokens(char *token, size_t *tokens_size,
 		char **tokens)
 {
 	*tokens_size += 1;
-	tokens = realloc(tokens, *tokens_size * sizeof(char *));
+	tokens = _realloc(tokens, (*tokens_size - 1) * sizeof(char *),
+			*tokens_size * sizeof(char *));
 	if (!tokens)
 	{
 		perror("Malloc fail");

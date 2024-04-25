@@ -79,8 +79,9 @@ static int check_for_errors(char **tokens)
  */
 static char **subarray_add(char **subarray, unsigned int *sub_len, char *s)
 {
-	subarray = realloc(subarray, sizeof(char *) * (*sub_len + 1));
 	*sub_len += 1;
+	subarray = _realloc(subarray, (*sub_len - 1) * sizeof(char *),
+			sizeof(char *) * *sub_len);
 	if (!subarray)
 	{
 		perror("Realloc error");
