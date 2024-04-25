@@ -17,9 +17,9 @@ MAGENTA := \033[35m
 PROGRAM_NAME := $(BLUE)$(BOLD)(MAKE)=>$(RESET)
 
 # Variables que podes cambiar
-DEFAULT_OUTPUT := shelloc_holmes
+DEFAULT_OUTPUT := shelloc_homes
 CFLAGS := -Wall -Werror -Wextra -pedantic -std=gnu89
-EXTRACFLAGS := -g
+EXTRACFLAGS :=
 OFLAGS := 
 VALGRINDFLAGS := -s --leak-check=full --show-leak-kinds=all
 

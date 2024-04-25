@@ -2,25 +2,6 @@
 
 
 /**
- * check_if_operator - Checks if the string is an operator.
- *
- * @s: String to compare.
- *
- * Return: 0 if ";", 1 if "&&", 2 if "||". Else -1.
- */
-static int check_if_operator(char *s)
-{
-	int i;
-	char operators[3][3] = {";\0", "&&", "||"};
-
-	for (i = 0; i < 3; i++)
-		if (_strcmp(s, operators[i]) == 0)
-			return (i);
-
-	return (-1);
-}
-
-/**
  * execute_skipper - Check if the next execve is to be skipped.
  *
  * @errorno: errno.
@@ -35,7 +16,7 @@ static int execute_skipper(int errorno, int operator)
 	if (operator == 1)
 		return (errorno == 0);
 	if (operator == 2)
-		return (!(errorno == 0));
+		return (errorno != 0);
 	return (-1);
 }
 
@@ -48,8 +29,8 @@ static int execute_skipper(int errorno, int operator)
  */
 static int check_for_errors(char **tokens)
 {
-	unsigned int i, len;
-	int operator;
+	char operators[3][3] = {";\0", "&&", "||"};
+	unsigned int i, l, len;
 
 	if (!tokens || !tokens[0])
 	{
@@ -58,8 +39,12 @@ static int check_for_errors(char **tokens)
 	}
 	for (i = 0, len = 1; tokens[i]; i++)
 	{
-		operator = check_if_operator(tokens[i]);
-		if (operator >= 0)
+		for (l = 0; l <= 2; l++)
+		{
+			if (_strcmp(tokens[i], operators[l]) == 0)
+				break;
+		}
+		if (l < 3)
 		{
 			if (len == 1)
 			{
@@ -109,6 +94,56 @@ static char **subarray_add(char **subarray, unsigned int *sub_len, char *s)
 }
 
 /**
+ * go_through_tokens - asdfg
+ *
+ * @tokens: asdfg
+ * @subarray: asdfg
+ * @sub_len: asdfg
+ * @path_head: asdfg
+ * @main_loop: asdfg
+ *
+ * Return: asdfg
+ */
+char **go_through_tokens(char **tokens, char **subarray,
+		unsigned int *sub_len, Tlist *path_head, int *main_loop)
+{
+	char operators[3][3] = {";\0", "&&", "||"};
+	unsigned int i, l;
+	int skip;
+
+	for (i = 0, *sub_len = 0, skip = 0; tokens[i]; i++)
+	{
+		for (l = 0; l <= 2; l++)
+		{
+			if (_strcmp(tokens[i], operators[l]) == 0)
+				break;
+		}
+		if (l < 3)
+		{
+			if (skip)
+			{
+				skip = 0;
+				continue;
+			}
+			subarray = subarray_add(subarray, sub_len, NULL);
+			if (!subarray)
+				return (NULL);
+			execute_command(subarray, path_head, main_loop);
+			if (execute_skipper(errno, l))
+				skip = 1;
+			*sub_len = 1;
+		}
+		else if (!skip)
+		{
+			subarray = subarray_add(subarray, sub_len, tokens[i]);
+			if (!subarray)
+				return (NULL);
+		}
+	}
+	return (subarray);
+}
+
+/**
  * separator - Separates tokens[] elements into subarrays.
  *
  * @tokens: Malloc'd list of tokens.
@@ -117,9 +152,8 @@ static char **subarray_add(char **subarray, unsigned int *sub_len, char *s)
  */
 void separator(char **tokens, Tlist *path_head, int *main_loop)
 {
-	unsigned int i, sub_len;
-	int operator, skip;
 	char **subarray;
+	unsigned int sub_len;
 
 	if (check_for_errors(tokens))
 		return;
@@ -129,31 +163,10 @@ void separator(char **tokens, Tlist *path_head, int *main_loop)
 		perror("Malloc error");
 		return;
 	}
-	for (i = 0, sub_len = 0, skip = 0; tokens[i]; i++)
-	{
-		operator = check_if_operator(tokens[i]);
-		if (operator >= 0)
-		{
-			if (skip)
-			{
-				skip = 0;
-				continue;
-			}
-			subarray = subarray_add(subarray, &sub_len, NULL);
-			if (!subarray)
-				return;
-			execute_command(subarray, path_head, main_loop);
-			if (execute_skipper(errno, operator))
-				skip = 1;
-			sub_len = 1;
-		}
-		else if (!skip)
-		{
-			subarray = subarray_add(subarray, &sub_len, tokens[i]);
-			if (!subarray)
-				return;
-		}
-	}
+	subarray = go_through_tokens(tokens, subarray, &sub_len,
+			path_head, main_loop);
+	if (!subarray)
+		return;
 	if (sub_len > 0)
 	{
 		subarray = subarray_add(subarray, &sub_len, NULL);
