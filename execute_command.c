@@ -84,9 +84,14 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	first_arg = args[0];
 
 	/* Check if executable */
-	if (access(first_arg, X_OK) == 0)
+	if (strchr(first_arg, '/'))
 	{
-		run_program(first_arg, args);
+		if (access(first_arg, X_OK) == 0)
+		{
+			run_program(first_arg, args);
+			return;
+		}
+		perror(first_arg);
 		return;
 	}
 
@@ -95,6 +100,6 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	if (command)
 		run_program(command, args);
 	else
-		perror(args[0]);
+		perror(first_arg);
 	free(command);
 }
