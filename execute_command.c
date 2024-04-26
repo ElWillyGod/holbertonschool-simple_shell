@@ -77,9 +77,11 @@ static void run_program(char *path, char **av)
 * @args: List of arguments.
 * @path_head: Head of list path.
 * @main_loop: Pointer to the boolean var of the main loop.
+* @shell_name: Name of shell.
 */
 
-void execute_command(char **args, Tlist *path_head, int *main_loop)
+void execute_command(char **args, Tlist *path_head, int *main_loop,
+		char *shell_name)
 {
 	char *command;
 	char *first_arg;
@@ -110,7 +112,8 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 		run_program(command, args);
 	else
 	{
-		fprintf(stderr, "%d: %s: not found\n", 1, first_arg);
+		fprintf(stderr, "%s: %d: %s: not found\n", shell_name, 1,
+				first_arg);
 		errno = 127;
 	}
 

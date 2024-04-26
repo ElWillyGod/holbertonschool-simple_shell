@@ -98,11 +98,12 @@ static char **subarray_add(char **subarray, unsigned int *sub_len, char *s)
  * @sub_len: asdfg
  * @path_head: asdfg
  * @main_loop: asdfg
+ * @shell_name: Name of shell.
  *
  * Return: asdfg
  */
-char **go_through_tokens(char **tokens, char **subarray,
-		unsigned int *sub_len, Tlist *path_head, int *main_loop)
+char **go_through_tokens(char **tokens, char **subarray, unsigned int *sub_len,
+		Tlist *path_head, int *main_loop, char *shell_name)
 {
 	unsigned int i, l;
 	int skip;
@@ -126,7 +127,8 @@ char **go_through_tokens(char **tokens, char **subarray,
 			subarray = subarray_add(subarray, sub_len, NULL);
 			if (!subarray)
 				return (NULL);
-			execute_command(subarray, path_head, main_loop);
+			execute_command(subarray, path_head, main_loop,
+					shell_name);
 			if (execute_skipper(errno, l))
 				skip = 1;
 			*sub_len = 0;
@@ -147,8 +149,10 @@ char **go_through_tokens(char **tokens, char **subarray,
  * @tokens: Malloc'd list of tokens.
  * @path_head: Head of PATH SLList.
  * @main_loop: Exit bool.
+ * @shell_name: Name of shell.
  */
-void separator(char **tokens, Tlist *path_head, int *main_loop)
+void separator(char **tokens, Tlist *path_head, int *main_loop,
+		char *shell_name)
 {
 	char **subarray;
 	unsigned int sub_len;
@@ -162,7 +166,7 @@ void separator(char **tokens, Tlist *path_head, int *main_loop)
 		return;
 	}
 	subarray = go_through_tokens(tokens, subarray, &sub_len,
-			path_head, main_loop);
+			path_head, main_loop, shell_name);
 	if (!subarray)
 		return;
 	if (sub_len > 0)
@@ -170,7 +174,7 @@ void separator(char **tokens, Tlist *path_head, int *main_loop)
 		subarray = subarray_add(subarray, &sub_len, NULL);
 		if (!subarray)
 			return;
-		execute_command(subarray, path_head, main_loop);
+		execute_command(subarray, path_head, main_loop, shell_name);
 	}
 	free(subarray);
 }
