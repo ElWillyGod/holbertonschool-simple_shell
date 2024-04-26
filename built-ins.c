@@ -32,7 +32,7 @@ void exit_main(char **args, int *main_loop, char *shell_name)
 		else
 		{
 			errno = 2;
-			fprintf(stderr, "%s: %d: Illegal number: %d\n", shell_name, 1, i);
+			fprintf(stderr, "%s: %d: exit: Illegal number: %d\n", shell_name, 1, i);
 		}
 	}
 	else
