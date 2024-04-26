@@ -21,7 +21,11 @@ void exit_main(char **args, int *main_loop, char *shell_name)
 		for (i = 0; args[1][i]; i++)
 		{
 			if (!_isdigit(args[1][i]) && args[1][i] != '-')
+			{
+				fprintf(stderr, "%s: %d: exit: Illegal number: %s\n",
+						shell_name, 1, args[1]);
 				return;
+			}
 		}
 		i = _atoi(args[1]);
 		if (i >= 0)
@@ -32,7 +36,8 @@ void exit_main(char **args, int *main_loop, char *shell_name)
 		else
 		{
 			errno = 2;
-			fprintf(stderr, "%s: %d: exit: Illegal number: %d\n", shell_name, 1, i);
+			fprintf(stderr, "%s: %d: exit: Illegal number: %d\n",
+					shell_name, 1, i);
 		}
 	}
 	else
