@@ -47,7 +47,6 @@ static void run_program(char *path, char **av)
 {
 	pid_t child_pid;
 	int status;
-	int exit_statis;
 
 	child_pid = fork();
 	if (child_pid == -1)
@@ -67,7 +66,7 @@ static void run_program(char *path, char **av)
 	else
 	{
 		wait(&status);
-		errno = WEXITSTATUS(exit_statis);
+		errno = WEXITSTATUS(status);
 	}
 }
 
