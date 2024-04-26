@@ -1,5 +1,6 @@
 #include "main.h"
 #include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 /**
@@ -108,6 +109,7 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	if (command)
 		run_program(command, args);
 	else
-		perror(first_arg);
+		fprintf(stderr, "%s: %s: command not found\n", args[0], strerror(errno));
+
 	free(command);
 }
