@@ -27,31 +27,30 @@ void free_list(Tlist *list)
  */
 Tlist *tokenize_path(char *environe, char *separator)
 {
-	char *token;
+	char *token, *environer;
 	Tlist *newNode = NULL;
 	Tlist *head = NULL;
 	Tlist *prev = NULL;
 
-	token = strtok(environe, separator);
+	environer = _strdup(environe);
+	token = strtok(environer, separator);
 	while (token)
 	{
 		newNode = malloc(sizeof(Tlist));
 		if (!newNode)
 		{
-			fprintf(stderr, "Malloc fail.");
-			free(environe);
-			free_list(head);
-			exit(20);
+			perror("Malloc error");
+			free(environer), free(environe), free_list(head);
+			exit(errno);
 		}
 
 		newNode->direct = strdup(token);
 		if (!newNode->direct)
 		{
-			fprintf(stderr, "Malloc fail.");
+			perror("Malloc error");
+			free(environer), free(environe), free_list(head);
 			free(newNode);
-			free(environe);
-			free_list(head);
-			exit(21);
+			exit(errno);
 		}
 
 		newNode->next = NULL;
@@ -63,6 +62,7 @@ Tlist *tokenize_path(char *environe, char *separator)
 		prev = newNode;
 		token = strtok(NULL, separator);
 	}
+	free(environer);
 	return (head);
 }
 
@@ -87,8 +87,8 @@ Tlist *path_in_list(char *environe, char *separatpr)
 	path_copy = _strdup(path);
 	if (!path_copy)
 	{
-		fprintf(stderr, "Malloc error.");
-		exit(19);
+		perror("Malloc error");
+		exit(errno);
 	}
 
 	free(path);
