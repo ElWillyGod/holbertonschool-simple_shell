@@ -108,10 +108,11 @@ static int shelloc_file(char *filename)
  *
  * @ac: n of args.
  * @av: args.
+ * @envirron: Environ arg.
  *
  * Return: 0 if successful.
  */
-int main(int ac, char **av)
+int main(int ac, char **av, char **envirron)
 {
 	char *line = NULL;
 	size_t line_size = 0;
@@ -119,7 +120,7 @@ int main(int ac, char **av)
 	Tlist *path_head = NULL;
 	int main_loop = 1, piper = 0;
 
-	path_head = path_in_list("PATH", ":");
+	path_head = path_in_list("PATH", ":", envirron);
 	if (ac == 2)
 		return (shelloc_file(av[1]));
 	if (!isatty(stdin->_fileno))

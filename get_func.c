@@ -4,17 +4,18 @@
 * _getenv - Gets enviorment variable of name (var).
 *
 * @var: Name of variable.
+* @envirron: Environ arg.
 *
 * Return: Content of variable.
 */
-char *_getenv(const char *var)
+char *_getenv(const char *var, char **envirron)
 {
 	int i;
 	size_t name, value_len;
 	char *ptr;
 	char *value;
 
-	for (i = 0; environ[i]; i++)
+	for (i = 0; envirron[i]; i++)
 	{
 		ptr = strchr(environ[i], '=');
 		if (!ptr)

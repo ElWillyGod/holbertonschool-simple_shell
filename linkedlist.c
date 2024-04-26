@@ -69,18 +69,19 @@ Tlist *tokenize_path(char *environe, char *separator)
 
 /**
  * path_in_list - Creates singly linked list of path.
- * @environe: sad
- * @separatpr: xd
+ * @environe: xd
+ * @separatpr: ptr
+ * @envirron: Environ arg.
  *
  * Return: Singly linked list of path.
  */
-Tlist *path_in_list(char *environe, char *separatpr)
+Tlist *path_in_list(char *environe, char *separatpr, char **envirron)
 {
 	char *path;
 	char *path_copy;
 	Tlist *head;
 
-	path = _getenv(environe);
+	path = _getenv(environe, envirron);
 	if (!path)
 		return (NULL);
 
