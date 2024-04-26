@@ -26,7 +26,6 @@ void exit_main(char **args, int *main_loop, char *shell_name)
 		i = _atoi(args[1]);
 		if (i >= 0)
 		{
-			printf("\n%d\n", i);
 			errno = i;
 			*main_loop = 0;
 		}
