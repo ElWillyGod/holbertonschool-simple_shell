@@ -109,7 +109,10 @@ void execute_command(char **args, Tlist *path_head, int *main_loop)
 	if (command)
 		run_program(command, args);
 	else
+	{
+		errno = 127;
 		fprintf(stderr, "%s: %s: command not found\n", args[0], strerror(errno));
+	}
 
 	free(command);
 }
