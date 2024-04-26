@@ -22,6 +22,7 @@ void exit_main(char **args, int *main_loop, char *shell_name)
 		{
 			if (!_isdigit(args[1][i]) && args[1][i] != '-')
 			{
+				errno = 2;
 				fprintf(stderr, "%s: %d: exit: Illegal number: %s\n",
 						shell_name, 1, args[1]);
 				return;
