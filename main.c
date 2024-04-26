@@ -119,7 +119,7 @@ int main(int ac, char **av)
 	Tlist *path_head = NULL;
 	int main_loop = 1, piper = 0;
 
-
+	path_head = path_in_list("PATH", ":");
 	if (ac == 2)
 		return (shelloc_file(av[1]));
 	if (!isatty(stdin->_fileno))
@@ -131,25 +131,23 @@ int main(int ac, char **av)
 	{
 		while (getline(&line, &line_size, stdin) > 0 && main_loop)
 		{
-			path_head = path_in_list("PATH", ":");
 			tokens = tokenize(line, tokens, " \t\n");
 			separator(tokens, path_head, &main_loop);
-			free_tokens(tokens), free_list(path_head);
+			free_tokens(tokens);
 		}
 	}
 	else
 	{
 		do {
-			path_head = path_in_list("PATH", ":");
 			printf("%s<<Shelloc Homes>>%s $ ", RED, RESET);
 			if (getline(&line, &line_size, stdin) == -1)
 				break;
 			tokens = tokenize(line, tokens, " \t\n");
 			separator(tokens, path_head, &main_loop);
-			free_tokens(tokens), free_list(path_head);
+			free_tokens(tokens);
 		} while (main_loop);
 	}
-	free(line), free(tokens);
+	free(line), free(tokens), free_list(path_head);
 	exit(errno);
 }
 

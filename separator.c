@@ -29,22 +29,18 @@ static int execute_skipper(int errorno, int operator)
  */
 static int check_for_errors(char **tokens)
 {
-	char operators[3][3] = {";\0", "&&", "||"};
 	unsigned int i, l, len;
 
-	if (!tokens || !tokens[0])
+	for (i = 0, l = 3, len = 1; tokens[i]; i++)
 	{
-		perror("Token array error");
-		return (1);
-	}
-	for (i = 0, len = 1; tokens[i]; i++)
-	{
-		for (l = 0; l <= 2; l++)
-		{
-			if (_strcmp(tokens[i], operators[l]) == 0)
-				break;
-		}
-		if (l < 3)
+		l = 3;
+		if (_strcmp(tokens[i], ";") == 0)
+			l = 0;
+		else if (_strcmp(tokens[i], "&&") == 0)
+			l = 1;
+		else if (_strcmp(tokens[i], "||") == 0)
+			l = 2;
+		if (l != 3)
 		{
 			if (len == 1)
 			{
@@ -58,7 +54,7 @@ static int check_for_errors(char **tokens)
 			len += 1;
 		}
 	}
-	if (len == 1)
+	if (l != 3 && len == 1)
 	{
 		perror("Operator w/o second arg");
 		return (1);
