@@ -120,7 +120,6 @@ int main(int ac, char **av)
 	int main_loop = 1, piper = 0;
 
 	path_head = path_in_list("PATH", ":");
-
 	if (ac == 2)
 		return (shelloc_file(av[1]));
 	if (!isatty(stdin->_fileno))
@@ -133,7 +132,7 @@ int main(int ac, char **av)
 		while (getline(&line, &line_size, stdin) > 0 && main_loop)
 		{
 			tokens = tokenize(line, tokens, " \t\n");
-			execute_command(tokens, path_head, &main_loop);
+			separator(tokens, path_head, &main_loop);
 			free_tokens(tokens);
 		}
 	}
@@ -144,12 +143,11 @@ int main(int ac, char **av)
 			if (getline(&line, &line_size, stdin) == -1)
 				break;
 			tokens = tokenize(line, tokens, " \t\n");
-			execute_command(tokens, path_head, &main_loop);
+			separator(tokens, path_head, &main_loop);
 			free_tokens(tokens);
 		} while (main_loop);
 	}
-
-	free_list(path_head), free(line), free(tokens);
+	free(line), free(tokens), free_list(path_head);
 	exit(errno);
 }
 

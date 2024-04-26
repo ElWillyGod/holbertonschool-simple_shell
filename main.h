@@ -56,11 +56,11 @@ int _atoi(char *s);
 /* strtok.c */
 char *_strtok(char *, char *);
 
-/**/
+/* realloc.c */
 char *_memcpy(char *dest, char *src, unsigned int n);
 void *_realloc(void *ptr, size_t old_size, size_t new_size);
 
-/**/
+/* linedlist.c */
 void free_list(Tlist *list);
 Tlist *path_in_list(char *env, char *separator);
 
