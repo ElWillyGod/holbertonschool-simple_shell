@@ -39,7 +39,7 @@ typedef struct rep_list
 typedef struct bi_s
 {
 	char *command;
-	void (*func)(char **, int *);
+	void (*func)(char **, int *, char *);
 } bi_t;
 
 
@@ -68,7 +68,7 @@ Tlist *path_in_list(char *env, char *separator);
 char *_getenv(const char *var);
 
 /* built_ins.c */
-int is_built_in(char **args, int *main_loop);
+int is_built_in(char **args, int *main_loop, char *shell_name);
 
 /* execute.c */
 void execute_command(char **args, Tlist *path_head, int *main_loop,

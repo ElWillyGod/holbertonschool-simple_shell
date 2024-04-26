@@ -94,10 +94,14 @@ static char **tokenize(char *line, char **tokens, char *separators)
  */
 static int shelloc_file(char *filename)
 {
-	int fd;
+	int fd, result;
 
 	fd = open(filename, O_RDONLY);
-	close(fd);
+	if (fd == -1)
+		return (errno);
+	result = close(fd);
+	if (result == 4)
+		close(fd);
 
 	return (errno);
 }

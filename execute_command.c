@@ -90,7 +90,7 @@ void execute_command(char **args, Tlist *path_head, int *main_loop,
 		return;
 
 	/* Check if built-in */
-	if (is_built_in(args, main_loop))
+	if (is_built_in(args, main_loop, shell_name))
 		return;
 
 	first_arg = args[0];

@@ -10,21 +10,35 @@
  *
  * @args: List of arguments.
  * @main_loop: Pointer to the boolean var of the main loop.
+ * @shell_name: Name of shell.
  */
-void exit_main(char **args, int *main_loop)
+void exit_main(char **args, int *main_loop, char *shell_name)
 {
 	int i;
-
-	*main_loop = 0;
 
 	if (args[1])
 	{
 		for (i = 0; args[1][i]; i++)
 		{
-			if (!_isdigit(args[1][i]))
+			if (!_isdigit(args[1][i]) && args[1][i] != '-')
 				return;
 		}
-		errno = _atoi(args[1]);
+		i = _atoi(args[1]);
+		if (i >= 0)
+		{
+			printf("\n%d\n", i);
+			errno = i;
+			*main_loop = 0;
+		}
+		else
+		{
+			errno = 2;
+			fprintf(stderr, "%s: %d: Illegal number: %d\n", shell_name, 1, i);
+		}
+	}
+	else
+	{
+		*main_loop = 0;
 	}
 }
 
@@ -33,8 +47,10 @@ void exit_main(char **args, int *main_loop)
  *
  * @args: List of arguments.
  * @main_loop: Pointer to the boolean var of the main loop.
+ * @shell_name: Name of shell.
  */
-void cd(char **args, __attribute__((unused)) int *main_loop)
+void cd(char **args, __attribute__((unused)) int *main_loop,
+		__attribute__((unused)) char *shell_name)
 {
 	char *rute;
 
@@ -54,16 +70,18 @@ void cd(char **args, __attribute__((unused)) int *main_loop)
 }
 
 /**
- *print_env - imprime las variables de entorno
+ * print_env - imprime las variables de entorno
  *
- *@args: void;
- *@main_loop: void tambien;
+ * @args: void;
+ * @main_loop: void tambien;
+ * @shell_name: Name of shell.
  *
- *Return: void solo imprime;
+ * Return: void solo imprime;
  */
 
 void print_env(__attribute__((unused)) char **args,
-	       __attribute__((unused)) int *main_loop)
+	       __attribute__((unused)) int *main_loop,
+	       __attribute__((unused)) char *shell_name)
 {
 	/* print event*/
 	int i;
@@ -78,10 +96,11 @@ void print_env(__attribute__((unused)) char **args,
  *
  * @args: List of arguments.
  * @main_loop: Pointer to the boolean var of the main loop.
+ * @shell_name: Name of shell.
  *
  * Return: 0 if not built-in was found, execute and ret 1 if found.
  */
-int is_built_in(char **args, int *main_loop)
+int is_built_in(char **args, int *main_loop, char *shell_name)
 {
 	bi_t built_ins[] = {
 		{"exit", exit_main},
@@ -95,7 +114,7 @@ int is_built_in(char **args, int *main_loop)
 	{
 		if (_strcmp(built_ins[i].command, args[0]) == 0)
 		{
-			built_ins[i].func(args, main_loop);
+			built_ins[i].func(args, main_loop, shell_name);
 			return (1);
 		}
 	}
