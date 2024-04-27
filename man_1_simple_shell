@@ -1,7 +1,7 @@
 .Dd 22/4/24
-.Dt shelloc_holmes
+.Dt shelloc_homes
 .Sh NAME
-.Nm shelloc_holmes
+.Nm shelloc_homes
 .Nd A command language interpreter similar in function to sh.
 .Sh SYNOPSIS
 .Nm
@@ -17,13 +17,15 @@ If the shell is executed with no arguments it loops prompting the user for comma
 .It Piped mode:
 If it text gets parsed via stdin then it interprets that text without engaging in interactive mode.
 
-
 .It File reading mode:
+.B (WORK IN PROGRESS)
 If a filename is passed as an argument it interprets each line of the file as a command.
 .Sh EXIT STATUS
-0 - Always.
+Returns errno of last command. If in interactive mode the user can specify the return number using "exit <number>". The number must be positive.
 
 .Sh EXAMPLES
-echo "ls -la" | ./shelloc_holmes
- 
-\../shelloc_holmes file.txt
+echo "ls -la ; echo It worked!" | ./
+.Nm
+
+.Sh SEE ALSO
+README.md
